@@ -9,7 +9,8 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
-  MealItem({
+  final Function removeItem;
+  const MealItem({
     super.key,
     required this.id,
     required this.title,
@@ -17,6 +18,7 @@ class MealItem extends StatelessWidget {
     required this.complexity,
     required this.duration,
     required this.imageUrl,
+    required this.removeItem,
   });
   String get complexityText {
     switch (complexity) {
@@ -43,9 +45,22 @@ class MealItem extends StatelessWidget {
         return 'Unknown';
     }
   }
-  void inkWellFunction(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MealDetailScreen(id: id),),);
+
+  void inkWellFunction(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealDetailScreen(id: id),
+      ),
+    ).then(
+      (value) {
+        if (value != null) {
+          removeItem(value);
+        }
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -61,7 +76,7 @@ class MealItem extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
                   ),
@@ -80,7 +95,7 @@ class MealItem extends StatelessWidget {
                     color: Colors.black54,
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 24, color: Colors.white),
+                      style: const TextStyle(fontSize: 24, color: Colors.white),
                       softWrap: true,
                       overflow: TextOverflow.fade,
                     ),
@@ -95,22 +110,22 @@ class MealItem extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.schedule),
-                      SizedBox(width: 6),
+                      const Icon(Icons.schedule),
+                      const SizedBox(width: 6),
                       Text("$duration min"),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(Icons.work),
-                      SizedBox(width: 6),
+                      const Icon(Icons.work),
+                      const SizedBox(width: 6),
                       Text(complexityText),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(Icons.attach_money),
-                      SizedBox(width: 6),
+                      const Icon(Icons.attach_money),
+                      const SizedBox(width: 6),
                       Text(affordabilityText),
                     ],
                   ),
