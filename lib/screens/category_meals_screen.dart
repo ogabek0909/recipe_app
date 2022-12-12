@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/dummy_data.dart';
+import 'package:recipe_app/screens/filters_screen.dart';
 import 'package:recipe_app/widgets/meal_item.dart';
 
 import '../models/meal.dart';
@@ -15,25 +16,23 @@ class CategoryMealsScreen extends StatefulWidget {
 }
 
 class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
-  List<Meal> displayedMeals=[];
-  void _removeItem(String mealId){
+  List<Meal> displayedMeals = [];
+  void _removeItem(String mealId) {
     setState(() {
-    displayedMeals.removeWhere((element) => element.id==mealId);
-      
+      displayedMeals.removeWhere((element) => element.id == mealId);
     });
   }
+
   @override
   void initState() {
-    displayedMeals = DUMMY_MEALS
+    displayedMeals = availableMeals
         .where((element) => element.categories.contains(widget.categoryId))
         .toList();
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.categoryTitle),
@@ -48,7 +47,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
             complexity: displayedMeals[index].complexity,
             duration: displayedMeals[index].duration,
             imageUrl: displayedMeals[index].imageUrl,
-            removeItem: _removeItem,
+           
           );
         },
       ),

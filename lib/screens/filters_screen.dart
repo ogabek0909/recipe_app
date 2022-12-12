@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_app/dummy_data.dart';
 import 'package:recipe_app/widgets/main_drawer.dart';
 
 class FiltersScreen extends StatefulWidget {
@@ -8,18 +9,55 @@ class FiltersScreen extends StatefulWidget {
   State<FiltersScreen> createState() => _FiltersScreenState();
 }
 
+Map<String, bool> _filters = {
+  'gluten': false,
+  'lactose': false,
+  'vegetarian': false,
+  'vegan': false,
+};
+
 class _FiltersScreenState extends State<FiltersScreen> {
-  bool _glutenFree = false;
-  bool _vegetarian = false;
-  bool _vegan = false;
-  bool _lactoseFree = false;
+  bool _glutenFree = _filters['gluten']!;
+  bool _vegetarian = _filters['vegetarian']!;
+  bool _vegan = _filters['vegan']!;
+  bool _lactoseFree = _filters['lactose']!;
 
   @override
   Widget build(BuildContext context) {
+    void setFilters() {
+      Map<String, bool> selected = {
+        'gluten': _glutenFree,
+        'lactose': _lactoseFree,
+        'vegetarian': _vegetarian,
+        'vegan': _vegan,
+      };
+      setState(() {
+        _filters = selected;
+        availableMeals = DUMMY_MEALS.where((element) {
+          if (_filters['gluten']! && !element.isGlutenFree) {
+            return false;
+          }
+          if (_filters['lactose']! && !element.isLactoseFree) {
+            return false;
+          }
+          if (_filters['vegetarian']! && !element.isVegetarian) {
+            return false;
+          }
+          if (_filters['vegan']! && !element.isVegan) {
+            return false;
+          }
+          return true;
+        }).toList();
+      });
+    }
+
     return Scaffold(
-      drawer: const MainDrawer(),
+        drawer: const MainDrawer(),
         appBar: AppBar(
           title: const Text('Your Filters'),
+          actions: [
+            IconButton(onPressed: setFilters, icon: const Icon(Icons.save))
+          ],
         ),
         body: Column(
           children: [

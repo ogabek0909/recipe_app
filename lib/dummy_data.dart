@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import './models/category.dart';
 import 'models/meal.dart';
+List<Meal> availableMeals=DUMMY_MEALS;
+List<Meal> favoriteMeals=[];
 
 const DUMMY_CATEGORIES = const [
   Category(

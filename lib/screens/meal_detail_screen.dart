@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import '../dummy_data.dart';
 
-class MealDetailScreen extends StatelessWidget {
+class MealDetailScreen extends StatefulWidget {
   final String id;
   const MealDetailScreen({super.key, required this.id});
 
   @override
+  State<MealDetailScreen> createState() => _MealDetailScreenState();
+}
+
+class _MealDetailScreenState extends State<MealDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    final selectedMeal = DUMMY_MEALS.firstWhere((element) => element.id == id);
+    final selectedMeal =
+        DUMMY_MEALS.firstWhere((element) => element.id == widget.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedMeal.title),
@@ -61,9 +67,23 @@ class MealDetailScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pop(id);
+          final existingIndex =
+              favoriteMeals.indexWhere((element) => element.id == widget.id);
+          if (existingIndex >= 0) {
+            setState(() {
+              favoriteMeals.removeAt(existingIndex);
+            });
+          } else {
+            setState(() {
+              favoriteMeals.add(
+                  DUMMY_MEALS.firstWhere((element) => element.id == widget.id));
+            });
+          }
+          
         },
-        child: const Icon(Icons.delete),
+        child: favoriteMeals.any((element) => element.id == widget.id)
+            ? const Icon(Icons.star)
+            : const Icon(Icons.star_border),
       ),
     );
   }
